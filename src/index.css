@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Healthcare teal color palette */
+    --background: 180 20% 99%;
+    --foreground: 200 50% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 50% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 50% 10%;
+
+    --primary: 174 62% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 180 30% 96%;
+    --secondary-foreground: 200 50% 15%;
+
+    --muted: 180 20% 94%;
+    --muted-foreground: 200 20% 45%;
+
+    --accent: 174 50% 92%;
+    --accent-foreground: 174 62% 25%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 180 20% 90%;
+    --input: 180 20% 90%;
+    --ring: 174 62% 38%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(174 62% 38%) 0%, hsl(180 50% 45%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(180 30% 98%) 0%, hsl(174 40% 95%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(180 20% 98%) 100%);
+    
+    --shadow-sm: 0 1px 2px 0 hsl(200 50% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(200 50% 10% / 0.07), 0 2px 4px -2px hsl(200 50% 10% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(200 50% 10% / 0.08), 0 4px 6px -4px hsl(200 50% 10% / 0.05);
+    --shadow-glow: 0 0 20px hsl(174 62% 38% / 0.15);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 174 62% 38%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 174 50% 95%;
+    --sidebar-accent-foreground: 174 62% 25%;
+    --sidebar-border: 180 20% 90%;
+    --sidebar-ring: 174 62% 38%;
+  }
+
+  .dark {
+    --background: 200 50% 6%;
+    --foreground: 180 20% 98%;
+
+    --card: 200 45% 8%;
+    --card-foreground: 180 20% 98%;
+
+    --popover: 200 45% 8%;
+    --popover-foreground: 180 20% 98%;
+
+    --primary: 174 55% 45%;
+    --primary-foreground: 200 50% 5%;
+
+    --secondary: 200 40% 12%;
+    --secondary-foreground: 180 20% 95%;
+
+    --muted: 200 40% 15%;
+    --muted-foreground: 180 15% 60%;
+
+    --accent: 174 40% 15%;
+    --accent-foreground: 174 55% 70%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 60% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 80% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 200 40% 18%;
+    --input: 200 40% 18%;
+    --ring: 174 55% 45%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(174 55% 45%) 0%, hsl(180 45% 35%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(200 50% 6%) 0%, hsl(200 45% 10%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(200 45% 8%) 0%, hsl(200 40% 10%) 100%);
+
+    --sidebar-background: 200 50% 8%;
+    --sidebar-foreground: 180 20% 95%;
+    --sidebar-primary: 174 55% 45%;
+    --sidebar-primary-foreground: 200 50% 5%;
+    --sidebar-accent: 174 40% 15%;
+    --sidebar-accent-foreground: 174 55% 70%;
+    --sidebar-border: 200 40% 18%;
+    --sidebar-ring: 174 55% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
