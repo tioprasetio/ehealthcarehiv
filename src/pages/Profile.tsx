@@ -52,6 +52,7 @@ export default function Profile() {
         });
 
         if (authError) throw authError;
+        await supabase.auth.signOut();
       }
 
       toast.success("Profil berhasil diperbarui");
