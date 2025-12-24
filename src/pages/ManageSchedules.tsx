@@ -71,6 +71,12 @@ export default function ManageSchedules() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMedDialogOpen, setIsMedDialogOpen] = useState(false);
   const [isControlDialogOpen, setIsControlDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: string;
+    type: "med" | "control";
+    name: string;
+  } | null>(null);
 
   const [medForm, setMedForm] = useState({
     patient_id: "",
@@ -197,37 +203,45 @@ export default function ManageSchedules() {
     }
   };
 
-  const handleDeleteMed = async (id: string) => {
-    if (!confirm("Yakin ingin menghapus jadwal obat ini?")) return;
-
-    try {
-      const { error } = await supabase
-        .from("medication_schedules")
-        .delete()
-        .eq("id", id);
-      if (error) throw error;
-      toast.success("Jadwal obat berhasil dihapus");
-      fetchData();
-    } catch (error) {
-      console.error(error);
-      toast.error("Gagal menghapus jadwal obat");
-    }
+  const openDeleteDialog = (
+    id: string,
+    type: "med" | "control",
+    name: string
+  ) => {
+    setDeleteTarget({ id, type, name });
+    setDeleteDialogOpen(true);
   };
 
-  const handleDeleteControl = async (id: string) => {
-    if (!confirm("Yakin ingin menghapus jadwal kontrol ini?")) return;
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
 
     try {
+      const table =
+        deleteTarget.type === "med"
+          ? "medication_schedules"
+          : "control_schedules";
       const { error } = await supabase
-        .from("control_schedules")
+        .from(table)
         .delete()
-        .eq("id", id);
+        .eq("id", deleteTarget.id);
       if (error) throw error;
-      toast.success("Jadwal kontrol berhasil dihapus");
+
+      toast.success(
+        deleteTarget.type === "med"
+          ? "Jadwal obat berhasil dihapus"
+          : "Jadwal kontrol berhasil dihapus"
+      );
       fetchData();
     } catch (error) {
       console.error(error);
-      toast.error("Gagal menghapus jadwal kontrol");
+      toast.error(
+        deleteTarget.type === "med"
+          ? "Gagal menghapus jadwal obat"
+          : "Gagal menghapus jadwal kontrol"
+      );
+    } finally {
+      setDeleteDialogOpen(false);
+      setDeleteTarget(null);
     }
   };
 
@@ -387,7 +401,13 @@ export default function ManageSchedules() {
                           variant="ghost"
                           size="icon"
                           className="text-destructive"
-                          onClick={() => handleDeleteMed(schedule.id)}
+                          onClick={() =>
+                            openDeleteDialog(
+                              schedule.id,
+                              "med",
+                              schedule.medication_name
+                            )
+                          }
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -554,7 +574,13 @@ export default function ManageSchedules() {
                           variant="ghost"
                           size="icon"
                           className="text-destructive"
-                          onClick={() => handleDeleteControl(schedule.id)}
+                          onClick={() =>
+                            openDeleteDialog(
+                              schedule.id,
+                              "control",
+                              schedule.profiles?.full_name || "jadwal"
+                            )
+                          }
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -567,6 +593,27 @@ export default function ManageSchedules() {
           </TabsContent>
         </Tabs>
       </div>
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Hapus</DialogTitle>
+          </DialogHeader>
+          <p className="my-4">
+            Apakah kamu yakin ingin menghapus <b>{deleteTarget?.name}</b>?
+          </p>
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Batal
+            </Button>
+            <Button variant="destructive" onClick={handleConfirmDelete}>
+              Hapus
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }

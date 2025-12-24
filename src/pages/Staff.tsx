@@ -1,18 +1,31 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import DashboardLayout from '@/components/layouts/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
-import { Users, Plus, Shield, Calendar, Trash2 } from 'lucide-react';
-import { z } from 'zod';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import { Users, Plus, Shield, Calendar, Trash2 } from "lucide-react";
+import { z } from "zod";
 
 interface Staff {
   user_id: string;
@@ -22,29 +35,34 @@ interface Staff {
 }
 
 const staffSchema = z.object({
-  fullName: z.string().min(2, 'Nama minimal 2 karakter').max(100, 'Nama terlalu panjang'),
-  email: z.string().email('Email tidak valid'),
-  password: z.string().min(6, 'Password minimal 6 karakter'),
+  fullName: z
+    .string()
+    .min(2, "Nama minimal 2 karakter")
+    .max(100, "Nama terlalu panjang"),
+  email: z.string().email("Email tidak valid"),
+  password: z.string().min(6, "Password minimal 6 karakter"),
+  phone: z.string().regex(/^08[0-9]{8,11}$/, "Format nomor HP tidak valid"),
 });
 
 export default function Staff() {
   const { user, role } = useAuth();
   const navigate = useNavigate();
-  
+
   const [staffList, setStaffList] = useState<Staff[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    password: '',
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
   });
 
   useEffect(() => {
-    if (role !== 'admin') {
-      navigate('/dashboard');
+    if (role !== "admin") {
+      navigate("/");
       return;
     }
     fetchStaff();
@@ -55,9 +73,9 @@ export default function Staff() {
 
     // Get all admin user IDs
     const { data: adminRoles, error: rolesError } = await supabase
-      .from('user_roles')
-      .select('user_id')
-      .eq('role', 'admin');
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "admin");
 
     if (rolesError || !adminRoles) {
       console.error(rolesError);
@@ -75,10 +93,10 @@ export default function Staff() {
 
     // Get profiles for these admins
     const { data: profiles, error: profilesError } = await supabase
-      .from('profiles')
-      .select('user_id, full_name, phone, created_at')
-      .in('user_id', adminIds)
-      .order('full_name');
+      .from("profiles")
+      .select("user_id, full_name, phone, created_at")
+      .in("user_id", adminIds)
+      .order("full_name");
 
     if (profilesError) {
       console.error(profilesError);
@@ -96,40 +114,57 @@ export default function Staff() {
     try {
       const validated = staffSchema.parse(formData);
 
-      // Create user via Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: validated.email,
-        password: validated.password,
-        options: {
-          data: {
-            full_name: validated.fullName,
+      const { data, error } = await supabase.functions.invoke(
+        "create-admin-user",
+        {
+          body: {
+            email: validated.email,
+            password: validated.password,
+            fullName: validated.fullName,
+            phone: validated.phone,
           },
-        },
-      });
+        }
+      );
 
-      if (authError) throw authError;
+      if (error) {
+        console.error("Function error:", error);
 
-      if (authData.user) {
-        // Update the role to admin
-        const { error: roleError } = await supabase
-          .from('user_roles')
-          .update({ role: 'admin' })
-          .eq('user_id', authData.user.id);
+        // Extract error message from context if available
+        const errorMessage =
+          error.context?.body?.error ||
+          error.message ||
+          "Gagal menambahkan tenaga medis";
 
-        if (roleError) throw roleError;
+        toast.error(errorMessage);
+        return;
       }
 
-      toast.success('Tenaga medis berhasil ditambahkan');
-      setFormData({ fullName: '', email: '', password: '' });
+      if (data?.error) {
+        console.error("API error:", data.error);
+        toast.error(data.error);
+        return;
+      }
+
+      if (!data?.success) {
+        toast.error("Gagal menambahkan tenaga medis");
+        return;
+      }
+
+      toast.success("Tenaga medis berhasil ditambahkan");
+      setFormData({ fullName: "", email: "", password: "", phone: "" });
       setIsDialogOpen(false);
       fetchStaff();
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Caught error:", error);
+
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
-      } else {
-        console.error(error);
-        toast.error('Gagal menambahkan tenaga medis');
+        return;
       }
+
+      const errorMessage = error?.message || "Gagal menambahkan tenaga medis";
+
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -161,7 +196,9 @@ export default function Staff() {
                   <Input
                     id="fullName"
                     value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, fullName: e.target.value })
+                    }
                     placeholder="Nama lengkap"
                     required
                   />
@@ -172,28 +209,49 @@ export default function Staff() {
                     id="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     placeholder="email@contoh.com"
                     required
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">No HP</Label>
+                  <Input
+                    id="phone"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    placeholder="08xxxxxxxxxx"
+                    required
+                  />
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
                     type="password"
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                     placeholder="Minimal 6 karakter"
                     required
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsDialogOpen(false)}
+                  >
                     Batal
                   </Button>
                   <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                    {isSubmitting ? "Menyimpan..." : "Simpan"}
                   </Button>
                 </div>
               </form>
@@ -216,7 +274,9 @@ export default function Staff() {
           <Card className="text-center py-12">
             <CardContent>
               <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">Belum Ada Tenaga Medis</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                Belum Ada Tenaga Medis
+              </h3>
               <p className="text-muted-foreground mb-4">
                 Tambahkan tenaga medis pertama untuk memulai
               </p>
@@ -254,7 +314,10 @@ export default function Staff() {
                 <CardContent>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Calendar className="h-4 w-4" />
-                    Bergabung {format(new Date(staff.created_at), 'd MMM yyyy', { locale: id })}
+                    Bergabung{" "}
+                    {format(new Date(staff.created_at), "d MMM yyyy", {
+                      locale: id,
+                    })}
                   </div>
                 </CardContent>
               </Card>

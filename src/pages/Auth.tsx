@@ -28,6 +28,7 @@ const signupSchema = z.object({
     .min(2, "Nama minimal 2 karakter")
     .max(100, "Nama terlalu panjang"),
   email: z.string().email("Email tidak valid"),
+  phone: z.string().regex(/^08[0-9]{8,11}$/, "No HP tidak valid"),
   password: z.string().min(6, "Password minimal 6 karakter"),
 });
 
@@ -41,6 +42,7 @@ export default function Auth() {
   const [signupForm, setSignupForm] = useState({
     fullName: "",
     email: "",
+    phone: "",
     password: "",
   });
   const [resetEmail, setResetEmail] = useState("");
@@ -62,8 +64,6 @@ export default function Auth() {
       if (error) {
         if (error.message.includes("Invalid login credentials")) {
           toast.error("Email atau password salah");
-        } else {
-          toast.error(error.message);
         }
       } else {
         toast.success("Berhasil masuk!");
@@ -87,17 +87,29 @@ export default function Auth() {
       const { error } = await signUp(
         validated.email,
         validated.password,
+        validated.phone,
         validated.fullName
       );
 
       if (error) {
         if (error.message.includes("already registered")) {
           toast.error("Email sudah terdaftar");
-        } else {
-          toast.error(error.message);
         }
+        if (error.message.includes("profiles_phone_unique")) {
+          toast.error("Nomor HP sudah terdaftar");
+        }
+        console.error("SIGNUP ERROR:", error);
+        toast.error(error.message);
       } else {
         toast.success("Registrasi berhasil! Cek email untuk aktivasi email.");
+
+        // RESET FORM
+        setSignupForm({
+          fullName: "",
+          email: "",
+          phone: "",
+          password: "",
+        });
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -309,6 +321,19 @@ export default function Auth() {
                       />
                     </div>
                   </div>
+
+                  <div className="space-y-2">
+                    <Label>No HP</Label>
+                    <Input
+                      placeholder="08xxxxxxxxxx"
+                      value={signupForm.phone}
+                      onChange={(e) =>
+                        setSignupForm({ ...signupForm, phone: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
                     <div className="relative">

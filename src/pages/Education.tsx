@@ -23,7 +23,7 @@ import {
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { id, vi } from "date-fns/locale";
-import { BookOpen, Plus, Calendar, User, Trash2, Pencil } from "lucide-react";
+import { BookOpen, Plus, Calendar, User, Trash2, Pencil, Video } from "lucide-react";
 
 interface Article {
   id: string;
@@ -60,6 +60,13 @@ export default function Education() {
   const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
   const [isEditVideoDialogOpen, setIsEditVideoDialogOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<EducationVideo | null>(null);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    id: string;
+    type: "article" | "video";
+    title: string;
+  } | null>(null);
 
   const [videoForm, setVideoForm] = useState({
     title: "",
@@ -169,41 +176,43 @@ export default function Education() {
     setIsEditVideoDialogOpen(true);
   };
 
-  const handleDelete = async (articleId: string) => {
-    if (!confirm("Yakin ingin menghapus artikel ini?")) return;
-
-    try {
-      const { error } = await supabase
-        .from("education_articles")
-        .delete()
-        .eq("id", articleId);
-
-      if (error) throw error;
-
-      toast.success("Artikel berhasil dihapus");
-      fetchArticles();
-    } catch (error) {
-      console.error(error);
-      toast.error("Gagal menghapus artikel");
-    }
+  const openDeleteDialog = (
+    id: string,
+    type: "article" | "video",
+    title: string
+  ) => {
+    setItemToDelete({ id, type, title });
+    setDeleteDialogOpen(true);
   };
-  const handleDeleteVideoClick = async (videoId: string) => {
-    if (!confirm("Yakin ingin menghapus video ini?")) return;
+
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
 
     try {
-      const { error } = await supabase
-        .from("education_videos")
-        .delete()
-        .eq("id", videoId);
-
-      if (error) throw error;
-
-      toast.success("Video berhasil dihapus");
-      fetchVideos();
+      if (itemToDelete.type === "article") {
+        const { error } = await supabase
+          .from("education_articles")
+          .delete()
+          .eq("id", itemToDelete.id);
+        if (error) throw error;
+        toast.success("Artikel berhasil dihapus");
+        fetchArticles();
+      } else {
+        const { error } = await supabase
+          .from("education_videos")
+          .delete()
+          .eq("id", itemToDelete.id);
+        if (error) throw error;
+        toast.success("Video berhasil dihapus");
+        fetchVideos();
+      }
     } catch (error) {
       console.error(error);
-      toast.error("Gagal menghapus video");
+      toast.error("Gagal menghapus");
     }
+
+    setDeleteDialogOpen(false);
+    setItemToDelete(null);
   };
 
   return (
@@ -585,7 +594,11 @@ export default function Education() {
                         size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDelete(article.id);
+                          openDeleteDialog(
+                            article.id,
+                            "article",
+                            article.title
+                          );
                         }}
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
@@ -620,7 +633,7 @@ export default function Education() {
         ) : videos.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
-              <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <Video className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold text-foreground mb-2">
                 Belum Ada Video
               </h3>
@@ -671,11 +684,11 @@ export default function Education() {
                       </Button>
 
                       <Button
-                        size="sm"
                         variant="destructive"
+                        size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteVideoClick(video.id);
+                          openDeleteDialog(video.id, "video", video.title);
                         }}
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
@@ -730,6 +743,29 @@ export default function Education() {
                 </div>
               </>
             )}
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Konfirmasi Hapus</DialogTitle>
+            </DialogHeader>
+            <p>
+              Apakah kamu yakin ingin menghapus{" "}
+              <span className="font-semibold">{itemToDelete?.title}</span>?
+            </p>
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setDeleteDialogOpen(false)}
+              >
+                Batal
+              </Button>
+              <Button variant="destructive" onClick={handleConfirmDelete}>
+                Hapus
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>

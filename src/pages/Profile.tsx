@@ -13,6 +13,7 @@ export default function Profile() {
   const { user } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -23,11 +24,12 @@ export default function Profile() {
 
     supabase
       .from("profiles")
-      .select("full_name")
+      .select("full_name, phone")
       .eq("user_id", user.id)
       .single()
       .then(({ data }) => {
         if (data) setFullName(data.full_name);
+        setPhone(data.phone || "");
       });
   }, [user]);
 
@@ -39,7 +41,7 @@ export default function Profile() {
       // update profile
       const { error: profileError } = await supabase
         .from("profiles")
-        .update({ full_name: fullName })
+        .update({ full_name: fullName, phone: phone })
         .eq("user_id", user.id);
 
       if (profileError) throw profileError;
@@ -58,6 +60,16 @@ export default function Profile() {
       toast.success("Profil berhasil diperbarui");
       setPassword("");
     } catch (err: any) {
+      if (err.code === "23505") {
+        toast.error("Nomor HP sudah digunakan oleh akun lain");
+        return;
+      }
+
+      if (err.code === "23514") {
+        toast.error("Format nomor HP tidak valid. Gunakan 08xxxxxxxx");
+        return;
+      }
+
       toast.error(err.message || "Gagal update profil");
     } finally {
       setLoading(false);
@@ -82,6 +94,11 @@ export default function Profile() {
           <div>
             <Label>Email</Label>
             <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+
+          <div>
+            <Label>No HP</Label>
+            <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
           </div>
 
           <div>
