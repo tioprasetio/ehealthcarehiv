@@ -143,7 +143,7 @@ export default function Index() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Heart className="h-4 w-4 text-primary" />
-            <span>E-Health Care © 2024. Universitas Esa Unggul</span>
+            <span>E-Health Care © 2025. Universitas Esa Unggul</span>
           </div>
           <p>Aplikasi untuk mendukung penanganan HIV yang lebih baik</p>
         </div>
