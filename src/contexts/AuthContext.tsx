@@ -13,7 +13,7 @@ interface AuthContextType {
     email: string,
     password: string,
     phone: string,
-    fullName: string,
+    fullName: string
   ) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -45,16 +45,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    // supabase.auth.getSession().then(({ data: { session } }) => {
+    //   setSession(session);
+    //   setUser(session?.user ?? null);
 
-      if (session?.user) {
-        fetchUserRole(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
+    //   if (session?.user) {
+    //     fetchUserRole(session.user.id);
+    //   } else {
+    //     setLoading(false);
+    //   }
+    // });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     email: string,
     password: string,
     phone: string,
-    fullName: string,
+    fullName: string
   ) => {
     const redirectUrl = `${window.location.origin}/`;
 
