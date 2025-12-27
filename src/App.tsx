@@ -20,6 +20,7 @@ import Staff from "./pages/Staff";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import { MaintenanceGuard } from "./lib/MaintenanceGuard";
 
 const queryClient = new QueryClient();
 
@@ -47,17 +48,87 @@ function AppRoutes() {
       <Route path="/" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/education" element={<Education />} />
-      <Route path="/medications" element={<ProtectedRoute><Medications /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/health-log" element={<ProtectedRoute><HealthLog /></ProtectedRoute>} />
-      <Route path="/lab-results" element={<ProtectedRoute><LabResults /></ProtectedRoute>} />
-      <Route path="/control-schedule" element={<ProtectedRoute><ControlSchedule /></ProtectedRoute>} />
-      <Route path="/patients" element={<ProtectedRoute><Patients /></ProtectedRoute>} />
-      <Route path="/patient/:patientId" element={<ProtectedRoute><PatientDetail /></ProtectedRoute>} />
-      <Route path="/manage-schedules" element={<ProtectedRoute><ManageSchedules /></ProtectedRoute>} />
-      <Route path="/staff" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
+      <Route
+        path="/medications"
+        element={
+          <ProtectedRoute>
+            <Medications />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/health-log"
+        element={
+          <ProtectedRoute>
+            <HealthLog />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/lab-results"
+        element={
+          <ProtectedRoute>
+            <LabResults />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/control-schedule"
+        element={
+          <ProtectedRoute>
+            <ControlSchedule />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patients"
+        element={
+          <ProtectedRoute>
+            <Patients />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patient/:patientId"
+        element={
+          <ProtectedRoute>
+            <PatientDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/manage-schedules"
+        element={
+          <ProtectedRoute>
+            <ManageSchedules />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff"
+        element={
+          <ProtectedRoute>
+            <Staff />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -70,7 +141,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppRoutes />
+          <MaintenanceGuard>
+            <AppRoutes />
+          </MaintenanceGuard>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
