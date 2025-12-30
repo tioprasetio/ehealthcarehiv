@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Heart, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { Heart, Mail, Lock, User, ArrowLeft, Phone } from "lucide-react";
 import { z } from "zod";
+import heroImage from "@/assets/hero-doctor.jpeg";
 
 const loginSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -192,176 +193,170 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen gradient-hero flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6 animate-slide-up">
-        <div className="text-center space-y-2">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full gradient-primary shadow-glow">
-            <Heart className="h-8 w-8 text-primary-foreground" />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-xl">
+        {/* ================= HERO ================= */}
+        <div className="relative h-60 overflow-hidden rounded-b-[140px]">
+          <img
+            src={heroImage}
+            alt="Doctor"
+            className="h-full w-full object-cover"
+          />
+
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/60" />
+
+          {/* Logo */}
+          <div className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow">
+            <Heart className="h-5 w-5 text-teal-600" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">E-Health Care</h1>
-          <p className="text-muted-foreground">
-            Sistem Manajemen Kesehatan Terpadu
-          </p>
+
+          {/* Title inside hero */}
+          <div className="absolute bottom-8 left-0 right-0 text-center px-6">
+            <h1 className="text-2xl font-bold tracking-wide text-white">
+              E-Health Care
+            </h1>
+            <p className="text-sm text-white/80">Sistem Manajemen Kesehatan</p>
+          </div>
         </div>
 
-        <Card>
+        {/* ================= CONTENT ================= */}
+        <div className="px-6 pt-6 pb-8">
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2 mb-5 bg-slate-100">
               <TabsTrigger value="login">Masuk</TabsTrigger>
               <TabsTrigger value="signup">Daftar</TabsTrigger>
             </TabsList>
 
+            {/* ================= LOGIN ================= */}
             <TabsContent value="login">
-              <CardHeader>
-                <CardTitle>Selamat Datang Kembali</CardTitle>
-                <CardDescription>
-                  Masuk ke akun Anda untuk melanjutkan
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="login-email"
-                        type="email"
-                        placeholder="email@contoh.com"
-                        value={loginForm.email}
-                        onChange={(e) =>
-                          setLoginForm({ ...loginForm, email: e.target.value })
-                        }
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="login-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={loginForm.password}
-                        onChange={(e) =>
-                          setLoginForm({
-                            ...loginForm,
-                            password: e.target.value,
-                          })
-                        }
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Memproses..." : "Masuk"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="link"
-                    className="w-full text-sm"
-                    onClick={() => setShowForgotPassword(true)}
-                  >
-                    Lupa password?
-                  </Button>
-                </form>
-              </CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="relative">
+                  <Mail className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                  <Input
+                    type="email"
+                    placeholder="Username"
+                    value={loginForm.email}
+                    onChange={(e) =>
+                      setLoginForm({ ...loginForm, email: e.target.value })
+                    }
+                    className="pl-11 rounded-full bg-slate-100 focus:bg-white"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <Lock className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={loginForm.password}
+                    onChange={(e) =>
+                      setLoginForm({
+                        ...loginForm,
+                        password: e.target.value,
+                      })
+                    }
+                    className="pl-11 rounded-full bg-slate-100 focus:bg-white"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full rounded-full bg-teal-500 hover:bg-teal-600"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Memproses..." : "Sign in"}
+                </Button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="w-full text-center text-sm text-slate-500 hover:text-teal-600"
+                >
+                  Forgot your password?
+                </button>
+              </form>
             </TabsContent>
 
+            {/* ================= SIGNUP ================= */}
             <TabsContent value="signup">
-              <CardHeader>
-                <CardTitle>Buat Akun Baru</CardTitle>
-                <CardDescription>
-                  Daftar sebagai pasien untuk memulai
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSignup} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name">Nama Lengkap</Label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-name"
-                        type="text"
-                        placeholder="Nama Anda"
-                        value={signupForm.fullName}
-                        onChange={(e) =>
-                          setSignupForm({
-                            ...signupForm,
-                            fullName: e.target.value,
-                          })
-                        }
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="email@contoh.com"
-                        value={signupForm.email}
-                        onChange={(e) =>
-                          setSignupForm({
-                            ...signupForm,
-                            email: e.target.value,
-                          })
-                        }
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
+              <form onSubmit={handleSignup} className="space-y-4">
+                <div className="relative">
+                  <User className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                  <Input
+                    placeholder="Nama lengkap"
+                    value={signupForm.fullName}
+                    onChange={(e) =>
+                      setSignupForm({
+                        ...signupForm,
+                        fullName: e.target.value,
+                      })
+                    }
+                    className="pl-11 rounded-full bg-slate-100 focus:bg-white"
+                    required
+                  />
+                </div>
 
-                  <div className="space-y-2">
-                    <Label>No HP</Label>
-                    <Input
-                      placeholder="08xxxxxxxxxx"
-                      value={signupForm.phone}
-                      onChange={(e) =>
-                        setSignupForm({ ...signupForm, phone: e.target.value })
-                      }
-                      required
-                    />
-                  </div>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={signupForm.email}
+                    onChange={(e) =>
+                      setSignupForm({
+                        ...signupForm,
+                        email: e.target.value,
+                      })
+                    }
+                    className="pl-11 rounded-full bg-slate-100 focus:bg-white"
+                    required
+                  />
+                </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="signup-password"
-                        type="password"
-                        placeholder="Minimal 6 karakter"
-                        value={signupForm.password}
-                        onChange={(e) =>
-                          setSignupForm({
-                            ...signupForm,
-                            password: e.target.value,
-                          })
-                        }
-                        className="pl-10"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Memproses..." : "Daftar"}
-                  </Button>
-                </form>
-              </CardContent>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                  <Input
+                    placeholder="08xxxxxxxxxx"
+                    value={signupForm.phone}
+                    onChange={(e) =>
+                      setSignupForm({ ...signupForm, phone: e.target.value })
+                    }
+                    className="pl-11 rounded-full bg-slate-100 focus:bg-white"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <Lock className="absolute left-4 top-3.5 h-4 w-4 text-slate-400" />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={signupForm.password}
+                    onChange={(e) =>
+                      setSignupForm({
+                        ...signupForm,
+                        password: e.target.value,
+                      })
+                    }
+                    className="pl-11 rounded-full bg-slate-100 focus:bg-white"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full rounded-full bg-teal-500 hover:bg-teal-600"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Memproses..." : "Daftar"}
+                </Button>
+              </form>
             </TabsContent>
           </Tabs>
-        </Card>
+        </div>
       </div>
     </div>
   );

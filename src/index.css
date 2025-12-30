@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 
 @layer base {
   :root {
@@ -44,13 +44,27 @@
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(174 62% 38%) 0%, hsl(180 50% 45%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(180 30% 98%) 0%, hsl(174 40% 95%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(180 20% 98%) 100%);
-    
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(174 62% 38%) 0%,
+      hsl(180 50% 45%) 100%
+    );
+    --gradient-hero: linear-gradient(
+      180deg,
+      hsl(180 30% 98%) 0%,
+      hsl(174 40% 95%) 100%
+    );
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(0 0% 100%) 0%,
+      hsl(180 20% 98%) 100%
+    );
+
     --shadow-sm: 0 1px 2px 0 hsl(200 50% 10% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(200 50% 10% / 0.07), 0 2px 4px -2px hsl(200 50% 10% / 0.05);
-    --shadow-lg: 0 10px 15px -3px hsl(200 50% 10% / 0.08), 0 4px 6px -4px hsl(200 50% 10% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(200 50% 10% / 0.07),
+      0 2px 4px -2px hsl(200 50% 10% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(200 50% 10% / 0.08),
+      0 4px 6px -4px hsl(200 50% 10% / 0.05);
     --shadow-glow: 0 0 20px hsl(174 62% 38% / 0.15);
 
     --sidebar-background: 0 0% 98%;
@@ -98,9 +112,21 @@
     --input: 200 40% 18%;
     --ring: 174 55% 45%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(174 55% 45%) 0%, hsl(180 45% 35%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(200 50% 6%) 0%, hsl(200 45% 10%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(200 45% 8%) 0%, hsl(200 40% 10%) 100%);
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(174 55% 45%) 0%,
+      hsl(180 45% 35%) 100%
+    );
+    --gradient-hero: linear-gradient(
+      180deg,
+      hsl(200 50% 6%) 0%,
+      hsl(200 45% 10%) 100%
+    );
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(200 45% 8%) 0%,
+      hsl(200 40% 10%) 100%
+    );
 
     --sidebar-background: 200 50% 8%;
     --sidebar-foreground: 180 20% 95%;
@@ -120,7 +146,11 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -128,11 +158,11 @@
   .gradient-primary {
     background: var(--gradient-primary);
   }
-  
+
   .gradient-hero {
     background: var(--gradient-hero);
   }
-  
+
   .gradient-card {
     background: var(--gradient-card);
   }
@@ -159,7 +189,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
