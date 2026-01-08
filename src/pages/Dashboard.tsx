@@ -23,6 +23,10 @@ import MainMenuPatient from "@/assets/main_menu_pasien.svg";
 import MainMenuJadwal from "@/assets/main_menu_jadwal.svg";
 import MainMenuEdukasi from "@/assets/main_menu_edukasi.svg";
 import MainMenuMedis from "@/assets/main_menu_medis.svg";
+import AksiCepatJadwalObat from "@/assets/main_menu_jadwal_obat.svg";
+import AksiCepatCatatanKesehatan from "@/assets/main_menu_catatan_kesehatan.svg";
+import AksiCepatHasilLab from "@/assets/main_menu_hasil_lab.svg";
+import AksiCepatJadwalKontrol from "@/assets/main_menu_jadwal_kontrol.svg";
 
 interface Profile {
   full_name: string;
@@ -214,43 +218,34 @@ export default function Dashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <Link to="/medications">
-                    <Button
-                      variant="outline"
-                      className="w-full h-auto py-4 flex-col gap-2"
-                    >
-                      <Pill className="h-6 w-6 text-primary" />
-                      <span>Jadwal Obat</span>
-                    </Button>
-                  </Link>
-                  <Link to="/health-log">
-                    <Button
-                      variant="outline"
-                      className="w-full h-auto py-4 flex-col gap-2"
-                    >
-                      <ClipboardList className="h-6 w-6 text-primary" />
-                      <span>Catatan Kesehatan</span>
-                    </Button>
-                  </Link>
-                  <Link to="/lab-results">
-                    <Button
-                      variant="outline"
-                      className="w-full h-auto py-4 flex-col gap-2"
-                    >
-                      <FileText className="h-6 w-6 text-primary" />
-                      <span>Upload Hasil Lab</span>
-                    </Button>
-                  </Link>
-                  <Link to="/control-schedule">
-                    <Button
-                      variant="outline"
-                      className="w-full h-auto py-4 flex-col gap-2"
-                    >
-                      <Calendar className="h-6 w-6 text-primary" />
-                      <span>Jadwal Kontrol</span>
-                    </Button>
-                  </Link>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  <MenuCard
+                    title="Jadwal Minum Obat"
+                    description="Lihat jadwal minum obat"
+                    image={AksiCepatJadwalObat}
+                    href="/medications"
+                  />
+
+                  <MenuCard
+                    title="Catatan Kesehatan"
+                    description="Buat catatan"
+                    image={AksiCepatCatatanKesehatan}
+                    href="/health-log"
+                  />
+
+                  <MenuCard
+                    title="Upload Hasil Lab"
+                    description="Upload hasil pemeriksaan"
+                    image={AksiCepatHasilLab}
+                    href="/lab-results"
+                  />
+
+                  <MenuCard
+                    title="Jawal Kontrol"
+                    description="Lihat jadwal kontrol"
+                    image={AksiCepatJadwalKontrol}
+                    href="/control-schedule"
+                  />
                 </div>
               </CardContent>
             </Card>
