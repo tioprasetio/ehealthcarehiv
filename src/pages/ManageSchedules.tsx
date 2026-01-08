@@ -386,7 +386,7 @@ export default function ManageSchedules() {
                         backgroundPosition: "center",
                       }}
                     />
-                    <div className="relative z-10 bg-black/40 text-white [&_.text-muted-foreground]:text-white/80">
+                    <div className="relative z-10 text-white [&_.text-muted-foreground]:text-white/80">
                       <CardHeader className="py-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
@@ -562,7 +562,7 @@ export default function ManageSchedules() {
                         backgroundPosition: "center",
                       }}
                     />
-                    <div className="relative z-10 bg-black/40 text-white [&_.text-muted-foreground]:text-white/80">
+                    <div className="relative z-10 text-white [&_.text-muted-foreground]:text-white/80">
                       <CardHeader className="py-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
