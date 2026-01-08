@@ -52,6 +52,15 @@ export default function Staff() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const bannerStyles = [
+    "from-teal-400 to-cyan-400",
+    "from-indigo-400 to-purple-400",
+    "from-rose-400 to-pink-400",
+    "from-amber-400 to-orange-400",
+    "from-emerald-400 to-teal-500",
+  ];
+  const getBannerClass = (index: number) =>
+    bannerStyles[index % bannerStyles.length];
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -288,14 +297,51 @@ export default function Staff() {
           </Card>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {staffList.map((staff) => (
-              <Card key={staff.user_id}>
-                <CardHeader>
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full gradient-primary text-primary-foreground font-semibold">
+            {staffList.map((staff, index) => (
+              <Card
+                key={staff.user_id}
+                className="overflow-hidden hover:shadow-lg transition"
+              >
+                {/* Banner */}
+                <div
+                  className={`h-32 bg-gradient-to-r ${getBannerClass(
+                    index
+                  )} relative`}
+                >
+                  {/* Pattern overlay */}
+                  <div
+                    className="absolute inset-0 opacity-40"
+                    style={{
+                      backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.28) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.28) 1px, transparent 1px)
+          `,
+                      backgroundSize: "40px 40px",
+                    }}
+                  />
+                </div>
+
+                <CardContent className="space-y-3 mt-3">
+                  {/* Badge */}
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block rounded-md bg-primary/10 px-2 py-1 text-xs text-primary">
+                      Tenaga Medis
+                    </span>
+
+                    {staff.user_id === user?.id && (
+                      <span className="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded">
+                        Anda
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Nama */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
                       {staff.full_name.charAt(0).toUpperCase()}
                     </div>
-                    <div className="flex-1">
+
+                    <div>
                       <CardTitle className="text-base flex items-center gap-2">
                         {staff.full_name}
                         {staff.user_id === user?.id && (
@@ -304,21 +350,22 @@ export default function Staff() {
                           </span>
                         )}
                       </CardTitle>
-                      <CardDescription className="flex items-center gap-2">
-                        <Shield className="h-3 w-3" />
+
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Shield className="h-4 w-4" />
                         Tenaga Medis
-                      </CardDescription>
+                      </div>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
+
+                  {/* Tanggal */}
+                  <CardDescription className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
                     Bergabung{" "}
                     {format(new Date(staff.created_at), "d MMM yyyy", {
                       locale: id,
                     })}
-                  </div>
+                  </CardDescription>
                 </CardContent>
               </Card>
             ))}

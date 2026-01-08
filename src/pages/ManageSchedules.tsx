@@ -5,10 +5,7 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  CardContent
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,9 +27,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
-import { Pill, Calendar, Plus, Trash2, Clock, User } from "lucide-react";
+import { Pill, Calendar, Plus } from "lucide-react";
+import { ScheduleMenuCard } from "@/components/ScheduleMenuCard";
 
 interface Patient {
   user_id: string;
@@ -373,49 +369,24 @@ export default function ManageSchedules() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-3">
-                {medSchedules.map((schedule) => (
-                  <Card key={schedule.id}>
-                    <CardHeader className="py-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                            <Pill className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-base">
-                              {schedule.medication_name}
-                            </CardTitle>
-                            <CardDescription className="flex items-center gap-2">
-                              <User className="h-3 w-3" />
-                              {schedule.profiles?.full_name}
-                              <span>•</span>
-                              <Clock className="h-3 w-3" />
-                              {schedule.schedule_time.slice(0, 5)}
-                              <span>•</span>
-                              {schedule.dosage}
-                            </CardDescription>
-                          </div>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive"
-                          onClick={() =>
-                            openDeleteDialog(
-                              schedule.id,
-                              "med",
-                              schedule.medication_name
-                            )
-                          }
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
+              <CardContent>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {medSchedules.map((schedule) => (
+                    <ScheduleMenuCard
+                      key={schedule.id}
+                      type="med"
+                      schedule={schedule}
+                      onDelete={() =>
+                        openDeleteDialog(
+                          schedule.id,
+                          "med",
+                          schedule.medication_name
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+              </CardContent>
             )}
           </TabsContent>
 
@@ -538,57 +509,24 @@ export default function ManageSchedules() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="space-y-3">
-                {controlSchedules.map((schedule) => (
-                  <Card key={schedule.id}>
-                    <CardHeader className="py-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                            <Calendar className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-base">
-                              {format(
-                                new Date(schedule.scheduled_date),
-                                "d MMMM yyyy",
-                                { locale: id }
-                              )}
-                            </CardTitle>
-                            <CardDescription className="flex items-center gap-2">
-                              <User className="h-3 w-3" />
-                              {schedule.profiles?.full_name}
-                              <span>•</span>
-                              <Clock className="h-3 w-3" />
-                              {schedule.scheduled_time.slice(0, 5)}
-                              {schedule.location && (
-                                <>
-                                  <span>•</span>
-                                  {schedule.location}
-                                </>
-                              )}
-                            </CardDescription>
-                          </div>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive"
-                          onClick={() =>
-                            openDeleteDialog(
-                              schedule.id,
-                              "control",
-                              schedule.profiles?.full_name || "jadwal"
-                            )
-                          }
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
+              <CardContent>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {controlSchedules.map((schedule) => (
+                    <ScheduleMenuCard
+                      key={schedule.id}
+                      type="control"
+                      schedule={schedule}
+                      onDelete={() =>
+                        openDeleteDialog(
+                          schedule.id,
+                          "control",
+                          schedule.profiles?.full_name || "jadwal"
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+              </CardContent>
             )}
           </TabsContent>
         </Tabs>
