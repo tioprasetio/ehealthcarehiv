@@ -241,7 +241,7 @@ export default function Dashboard() {
                   />
 
                   <MenuCard
-                    title="Jawal Kontrol"
+                    title="Jadwal Kontrol"
                     description="Lihat jadwal kontrol"
                     image={AksiCepatJadwalKontrol}
                     href="/control-schedule"
