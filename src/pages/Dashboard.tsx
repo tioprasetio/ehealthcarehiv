@@ -134,7 +134,7 @@ export default function Dashboard() {
           <>
             {/* Quick Stats */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Obat Hari Ini
@@ -149,7 +149,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Catatan Hari Ini
@@ -166,7 +166,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Jadwal Kontrol
@@ -191,7 +191,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Edukasi
@@ -256,7 +256,7 @@ export default function Dashboard() {
         {role === "admin" && adminStats && (
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Total Pasien
@@ -273,7 +273,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Artikel Edukasi
@@ -290,7 +290,7 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              <Card className="gradient-card">
+              <Card className="card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
                     Jadwal Kontrol

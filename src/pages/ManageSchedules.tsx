@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import {
   Card,
-  CardContent
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardWithoutBg,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,8 +31,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Pill, Calendar, Plus } from "lucide-react";
-import { ScheduleMenuCard } from "@/components/ScheduleMenuCard";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import { Pill, Calendar, Plus, Trash2, Clock, User } from "lucide-react";
+import BackgroundJadwal from "@/assets/background_jadwal.svg";
 
 interface Patient {
   user_id: string;
@@ -369,24 +375,60 @@ export default function ManageSchedules() {
                 </CardContent>
               </Card>
             ) : (
-              <CardContent>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {medSchedules.map((schedule) => (
-                    <ScheduleMenuCard
-                      key={schedule.id}
-                      type="med"
-                      schedule={schedule}
-                      onDelete={() =>
-                        openDeleteDialog(
-                          schedule.id,
-                          "med",
-                          schedule.medication_name
-                        )
-                      }
+              <div className="space-y-3">
+                {medSchedules.map((schedule) => (
+                  <CardWithoutBg className="relative overflow-hidden border-l-4 border-emerald-500">
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: `url(${BackgroundJadwal})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
                     />
-                  ))}
-                </div>
-              </CardContent>
+                    <div className="relative z-10 bg-black/40 text-white [&_.text-muted-foreground]:text-white/80">
+                      <CardHeader className="py-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                              <Pill className="h-5 w-5 text-white" />
+                            </div>
+                            <div>
+                              <CardTitle className="text-base">
+                                {schedule.medication_name}
+                              </CardTitle>
+                              <CardDescription className="flex items-center gap-2">
+                                <User className="h-3 w-3" />
+                                {schedule.profiles?.full_name}
+                                <span>•</span>
+                                <Clock className="h-3 w-3" />
+                                {schedule.schedule_time.slice(0, 5)}
+                                <span>•</span>
+                                {schedule.dosage}
+                              </CardDescription>
+                            </div>
+                          </div>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-red-400 hover:text-red-300 hover:bg-white/10"
+                            onClick={() =>
+                              openDeleteDialog(
+                                schedule.id,
+                                "med",
+                                schedule.medication_name
+                              )
+                            }
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                    </div>
+                  </CardWithoutBg>
+                ))}
+              </div>
             )}
           </TabsContent>
 
@@ -509,24 +551,70 @@ export default function ManageSchedules() {
                 </CardContent>
               </Card>
             ) : (
-              <CardContent>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {controlSchedules.map((schedule) => (
-                    <ScheduleMenuCard
-                      key={schedule.id}
-                      type="control"
-                      schedule={schedule}
-                      onDelete={() =>
-                        openDeleteDialog(
-                          schedule.id,
-                          "control",
-                          schedule.profiles?.full_name || "jadwal"
-                        )
-                      }
+              <div className="space-y-3">
+                {controlSchedules.map((schedule) => (
+                  <CardWithoutBg className="relative overflow-hidden border-l-4 border-emerald-500">
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: `url(${BackgroundJadwal})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
                     />
-                  ))}
-                </div>
-              </CardContent>
+                    <div className="relative z-10 bg-black/40 text-white [&_.text-muted-foreground]:text-white/80">
+                      <CardHeader className="py-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                              <Calendar className="h-5 w-5 text-white" />
+                            </div>
+
+                            <div>
+                              <CardTitle className="text-base">
+                                {format(
+                                  new Date(schedule.scheduled_date),
+                                  "d MMMM yyyy",
+                                  { locale: id }
+                                )}
+                              </CardTitle>
+
+                              <CardDescription className="flex items-center gap-2">
+                                <User className="h-3 w-3" />
+                                {schedule.profiles?.full_name}
+                                <span>•</span>
+                                <Clock className="h-3 w-3" />
+                                {schedule.scheduled_time.slice(0, 5)}
+                                {schedule.location && (
+                                  <>
+                                    <span>•</span>
+                                    {schedule.location}
+                                  </>
+                                )}
+                              </CardDescription>
+                            </div>
+                          </div>
+
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-red-400 hover:text-red-300 hover:bg-white/10"
+                            onClick={() =>
+                              openDeleteDialog(
+                                schedule.id,
+                                "control",
+                                schedule.profiles?.full_name || "jadwal"
+                              )
+                            }
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                    </div>
+                  </CardWithoutBg>
+                ))}
+              </div>
             )}
           </TabsContent>
         </Tabs>

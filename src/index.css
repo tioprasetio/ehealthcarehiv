@@ -7,10 +7,10 @@
 @layer base {
   :root {
     /* Healthcare teal color palette */
-    --background: 180 20% 99%;
+    --background: 206 87% 95%;
     --foreground: 200 50% 10%;
 
-    --card: 0 0% 100%;
+    --card: 206 92% 97%;
     --card-foreground: 200 50% 10%;
 
     --popover: 0 0% 100%;
@@ -67,13 +67,13 @@
       0 4px 6px -4px hsl(200 50% 10% / 0.05);
     --shadow-glow: 0 0 20px hsl(174 62% 38% / 0.15);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-background: 206 87% 95%;
+    --sidebar-foreground: 200 50% 15%;
     --sidebar-primary: 174 62% 38%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 174 50% 95%;
-    --sidebar-accent-foreground: 174 62% 25%;
-    --sidebar-border: 180 20% 90%;
+    --sidebar-accent: 206 80% 90%;
+    --sidebar-accent-foreground: 200 60% 20%;
+    --sidebar-border: 206 60% 85%;
     --sidebar-ring: 174 62% 38%;
   }
 

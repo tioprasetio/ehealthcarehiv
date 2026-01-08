@@ -193,8 +193,8 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-xl">
+    <div className="min-h-screen bg-[#DCEFFE] flex items-center justify-center p-4">
+      <div className="w-full max-w-md overflow-hidden rounded-3xl bg-[#e9f4ff] shadow-xl">
         {/* ================= HERO ================= */}
         <div className="relative h-60 overflow-hidden rounded-b-[140px]">
           <img

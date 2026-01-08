@@ -79,7 +79,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "z-50 w-64 bg-card border-r border-border transition-transform duration-300",
+          "z-50 w-64 bg-sidebar border-r border-sidebar-border transition-transform duration-300",
           "fixed inset-y-0 left-0 lg:static",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
           "lg:translate-x-0"
@@ -181,7 +181,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-4 lg:p-8 overflow-y-auto bg-background">
+          {children}
+        </main>
       </div>
     </div>
   );
