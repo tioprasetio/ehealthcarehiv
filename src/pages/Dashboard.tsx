@@ -18,6 +18,11 @@ import {
   FileText,
   Clock
 } from 'lucide-react';
+import { MenuCard } from '@/components/MenuCard';
+import MainMenuPatient from "@/assets/main_menu_pasien.svg";
+import MainMenuJadwal from "@/assets/main_menu_jadwal.svg";
+import MainMenuEdukasi from "@/assets/main_menu_edukasi.svg";
+import MainMenuMedis from "@/assets/main_menu_medis.svg";
 
 interface Profile {
   full_name: string;
@@ -107,13 +112,13 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      {role === 'patient' && <MedicationReminder />}
-      
+      {role === "patient" && <MedicationReminder />}
+
       <div className="space-y-6 animate-fade-in">
         {/* Greeting */}
         <div className="space-y-1">
           <h1 className="text-2xl font-bold text-foreground">
-            {greeting()}, {profile?.full_name || ''}! 👋
+            {greeting()}, {profile?.full_name || ""}! 👋
           </h1>
           <p className="text-muted-foreground">
             {format(new Date(), "EEEE, d MMMM yyyy", { locale: id })}
@@ -121,13 +126,15 @@ export default function Dashboard() {
         </div>
 
         {/* Patient Dashboard */}
-        {role === 'patient' && stats && (
+        {role === "patient" && stats && (
           <>
             {/* Quick Stats */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Obat Hari Ini</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Obat Hari Ini
+                  </CardTitle>
                   <Pill className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
@@ -140,39 +147,51 @@ export default function Dashboard() {
 
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Catatan Hari Ini</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Catatan Hari Ini
+                  </CardTitle>
                   <ClipboardList className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-foreground">
-                    {stats.todayLogExists ? '✓' : '–'}
+                    {stats.todayLogExists ? "✓" : "–"}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {stats.todayLogExists ? 'Sudah diisi' : 'Belum diisi'}
+                    {stats.todayLogExists ? "Sudah diisi" : "Belum diisi"}
                   </p>
                 </CardContent>
               </Card>
 
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Jadwal Kontrol</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Jadwal Kontrol
+                  </CardTitle>
                   <Calendar className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-lg font-bold text-foreground">
-                    {stats.upcomingControl 
-                      ? format(new Date(stats.upcomingControl.split(' ')[0]), 'd MMM', { locale: id })
-                      : '–'}
+                    {stats.upcomingControl
+                      ? format(
+                          new Date(stats.upcomingControl.split(" ")[0]),
+                          "d MMM",
+                          { locale: id }
+                        )
+                      : "–"}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {stats.upcomingControl ? 'kontrol berikutnya' : 'Tidak ada jadwal'}
+                    {stats.upcomingControl
+                      ? "kontrol berikutnya"
+                      : "Tidak ada jadwal"}
                   </p>
                 </CardContent>
               </Card>
 
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Edukasi</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Edukasi
+                  </CardTitle>
                   <BookOpen className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
@@ -190,30 +209,44 @@ export default function Dashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>Aksi Cepat</CardTitle>
-                <CardDescription>Akses fitur yang sering digunakan</CardDescription>
+                <CardDescription>
+                  Akses fitur yang sering digunakan
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   <Link to="/medications">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      className="w-full h-auto py-4 flex-col gap-2"
+                    >
                       <Pill className="h-6 w-6 text-primary" />
                       <span>Jadwal Obat</span>
                     </Button>
                   </Link>
                   <Link to="/health-log">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      className="w-full h-auto py-4 flex-col gap-2"
+                    >
                       <ClipboardList className="h-6 w-6 text-primary" />
                       <span>Catatan Kesehatan</span>
                     </Button>
                   </Link>
                   <Link to="/lab-results">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      className="w-full h-auto py-4 flex-col gap-2"
+                    >
                       <FileText className="h-6 w-6 text-primary" />
                       <span>Upload Hasil Lab</span>
                     </Button>
                   </Link>
                   <Link to="/control-schedule">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      className="w-full h-auto py-4 flex-col gap-2"
+                    >
                       <Calendar className="h-6 w-6 text-primary" />
                       <span>Jadwal Kontrol</span>
                     </Button>
@@ -225,39 +258,57 @@ export default function Dashboard() {
         )}
 
         {/* Admin Dashboard */}
-        {role === 'admin' && adminStats && (
+        {role === "admin" && adminStats && (
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Total Pasien</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Total Pasien
+                  </CardTitle>
                   <Users className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-foreground">{adminStats.totalPatients}</div>
-                  <p className="text-xs text-muted-foreground">pasien terdaftar</p>
+                  <div className="text-2xl font-bold text-foreground">
+                    {adminStats.totalPatients}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    pasien terdaftar
+                  </p>
                 </CardContent>
               </Card>
 
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Artikel Edukasi</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Artikel Edukasi
+                  </CardTitle>
                   <BookOpen className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-foreground">{adminStats.totalArticles}</div>
-                  <p className="text-xs text-muted-foreground">artikel tersedia</p>
+                  <div className="text-2xl font-bold text-foreground">
+                    {adminStats.totalArticles}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    artikel tersedia
+                  </p>
                 </CardContent>
               </Card>
 
               <Card className="gradient-card">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Jadwal Kontrol</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Jadwal Kontrol
+                  </CardTitle>
                   <Clock className="h-6 w-6 text-primary" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-foreground">{adminStats.pendingControls}</div>
-                  <p className="text-xs text-muted-foreground">jadwal mendatang</p>
+                  <div className="text-2xl font-bold text-foreground">
+                    {adminStats.pendingControls}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    jadwal mendatang
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -268,31 +319,34 @@ export default function Dashboard() {
                 <CardDescription>Kelola data pasien dan jadwal</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <Link to="/patients">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
-                      <Users className="h-6 w-6 text-primary" />
-                      <span>Daftar Pasien</span>
-                    </Button>
-                  </Link>
-                  <Link to="/manage-schedules">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
-                      <Pill className="h-6 w-6 text-primary" />
-                      <span>Kelola Jadwal</span>
-                    </Button>
-                  </Link>
-                  <Link to="/education">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
-                      <BookOpen className="h-6 w-6 text-primary" />
-                      <span>Kelola Edukasi</span>
-                    </Button>
-                  </Link>
-                  <Link to="/staff">
-                    <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2">
-                      <Users className="h-6 w-6 text-primary" />
-                      <span>Tenaga Medis</span>
-                    </Button>
-                  </Link>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  <MenuCard
+                    title="Daftar Pasien"
+                    description="Kelola data pasien"
+                    image={MainMenuPatient}
+                    href="/patients"
+                  />
+
+                  <MenuCard
+                    title="Kelola Jadwal"
+                    description="Atur jadwal pemeriksaan"
+                    image={MainMenuJadwal}
+                    href="/manage-schedules"
+                  />
+
+                  <MenuCard
+                    title="Edukasi"
+                    description="Materi edukasi"
+                    image={MainMenuEdukasi}
+                    href="/education"
+                  />
+
+                  <MenuCard
+                    title="Tenaga Medis"
+                    description="Data dokter & perawat"
+                    image={MainMenuMedis}
+                    href="/staff"
+                  />
                 </div>
               </CardContent>
             </Card>

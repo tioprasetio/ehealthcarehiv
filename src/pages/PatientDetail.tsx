@@ -138,7 +138,7 @@ export default function PatientDetail() {
           <TabsList>
             <TabsTrigger value="health" className="flex items-center gap-2">
               <ClipboardList className="h-4 w-4" />
-              Catatan Kesehatan
+              Catatan
             </TabsTrigger>
             <TabsTrigger value="lab" className="flex items-center gap-2">
               <Image className="h-4 w-4" />

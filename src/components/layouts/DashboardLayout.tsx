@@ -1,23 +1,23 @@
-import { ReactNode } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { 
-  Heart, 
-  LayoutDashboard, 
-  BookOpen, 
-  Pill, 
-  ClipboardList, 
-  Calendar, 
-  Image, 
-  Users, 
+import { ReactNode } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  Heart,
+  LayoutDashboard,
+  BookOpen,
+  Pill,
+  ClipboardList,
+  Calendar,
+  Image,
+  Users,
   LogOut,
   Menu,
   X,
-  Briefcase
-} from 'lucide-react';
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
+  Briefcase,
+} from "lucide-react";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -29,7 +29,6 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -43,17 +42,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    navigate("/auth");
   };
 
   const patientNavItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/education', label: 'Edukasi', icon: BookOpen },
-    { href: '/medications', label: 'Jadwal Obat', icon: Pill },
-    { href: '/health-log', label: 'Catatan Kesehatan', icon: ClipboardList },
-    { href: '/lab-results', label: 'Hasil Lab', icon: Image },
-    { href: '/control-schedule', label: 'Jadwal Kontrol', icon: Calendar },
-    { href: '/profile', label: 'Edit Akun', icon: Users },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/education", label: "Edukasi", icon: BookOpen },
+    { href: "/medications", label: "Jadwal Obat", icon: Pill },
+    { href: "/health-log", label: "Catatan Kesehatan", icon: ClipboardList },
+    { href: "/lab-results", label: "Hasil Lab", icon: Image },
+    { href: "/control-schedule", label: "Jadwal Kontrol", icon: Calendar },
+    { href: "/profile", label: "Edit Akun", icon: Users },
   ];
 
   const adminNavItems = [
@@ -65,10 +64,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { href: "/profile", label: "Edit Akun", icon: Users },
   ];
 
-  const navItems = role === 'admin' ? adminNavItems : patientNavItems;
+  const navItems = role === "admin" ? adminNavItems : patientNavItems;
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="h-screen bg-background flex overflow-hidden">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -80,11 +79,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transition-transform duration-300 lg:translate-x-0 lg:static",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          "z-50 w-64 bg-card border-r border-border transition-transform duration-300",
+          "fixed inset-y-0 left-0 lg:static",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
+          "lg:translate-x-0"
         )}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-screen">
           <div className="p-6 border-b border-border">
             <Link to="/dashboard" className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg gradient-primary">
